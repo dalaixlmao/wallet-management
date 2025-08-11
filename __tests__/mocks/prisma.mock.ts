@@ -3,8 +3,6 @@
  * Provides a consistent mock implementation for use in tests
  */
 
-import { OnRampStatus } from '@prisma/client';
-
 // Initialize mock data storage
 const users = new Map([
   [1, {
@@ -114,7 +112,7 @@ const mockPrismaClient = {
         userId,
         amount: data.amount,
         provider: data.provider,
-        status: data.status || OnRampStatus.Processing,
+        status: data.status || 'Processing',
         token: data.token || `token-${Date.now()}`,
         startTime: data.startTime || new Date(),
       };
@@ -169,6 +167,7 @@ const mockPrismaClient = {
   $transaction: jest.fn((callback) => callback(mockPrismaClient)),
   $connect: jest.fn(),
   $disconnect: jest.fn(),
+  $queryRaw: jest.fn().mockResolvedValue([]),
 };
 
 // Export the mock client
@@ -217,11 +216,4 @@ export const mockData = {
       locked: 0,
     });
   }
-};
-
-// Export enum values for tests to use
-export const OnRampStatus = {
-  Processing: 'Processing',
-  Success: 'Success',
-  Failure: 'Failure',
 };

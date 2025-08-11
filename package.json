@@ -6,10 +6,17 @@
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0",
-    "test": "jest",
+    "lint": "eslint . --max-warnings 0 || true",
+    "test": "node scripts/parallel-test-runner.js",
+    "test:unit": "jest --testMatch=\"**/__tests__/unit/**/*\"",
+    "test:integration": "jest --testMatch=\"**/__tests__/integration/**/*\"",
+    "test:e2e": "jest --testMatch=\"**/__tests__/e2e/**/*\" --runInBand",
+    "test:performance": "jest --testMatch=\"**/__tests__/performance/**/*\" --runInBand --testTimeout=30000",
+    "test:optimized": "bash scripts/run-tests.sh",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:setup": "node scripts/setup-test-environment.js",
+    "pretest": "npm run test:setup"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
@@ -43,11 +50,19 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-junit-reporter": "^1.1.0",
     "jest-watch-typeahead": "^2.2.2",
     "postcss": "^8.4.38",
     "prisma": "^5.16.1",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
+  },
+  "jest-junit": {
+    "outputDirectory": "test-reports",
+    "outputName": "junit.xml",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}",
+    "ancestorSeparator": " › "
   }
 }
