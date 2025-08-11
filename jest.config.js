@@ -28,4 +28,21 @@ module.exports = {
   ],
   testTimeout: 20000, // Increased timeout for tests that interact with database or external services
   verbose: true,
+  // Performance optimizations
+  cacheDirectory: '.test-cache/jest-cache',
+  maxWorkers: '50%', // Use up to half of available CPU cores
+  maxConcurrency: 5, // Limit concurrency for test files
+  // Improved reporting
+  testResultsProcessor: '<rootDir>/node_modules/jest-junit-reporter',
+  // Support running tests in parallel
+  runInBand: false, // Allow tests to run in parallel by default
+  bail: 0, // Don't stop on first test failure
+  // Improved error handling
+  errorOnDeprecated: true,
+  detectOpenHandles: true,
+  forceExit: true, // Force exit after all tests complete
+  // Cache and speed optimizations
+  transformIgnorePatterns: [
+    '/node_modules/(?!next|@next|next-auth)'
+  ],
 };
