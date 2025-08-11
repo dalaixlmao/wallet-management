@@ -1,0 +1,46 @@
+{
+  "environment": "development",
+  "spark": {
+    "app_name": "DataPipeline-Dev",
+    "master": "local[*]",
+    "log_level": "INFO",
+    "checkpoint_location": "/tmp/checkpoints",
+    "executor_memory": "2g",
+    "driver_memory": "1g",
+    "shuffle_partitions": 10,
+    "default_parallelism": 4
+  },
+  "aws": {
+    "region": "us-east-1",
+    "s3": {
+      "bucket": "data-pipeline-dev-bucket",
+      "input_prefix": "raw/",
+      "output_prefix": "processed/",
+      "archive_prefix": "archive/"
+    }
+  },
+  "gcp": {
+    "project": "data-pipeline-dev-project",
+    "region": "us-central1",
+    "gcs": {
+      "bucket": "data-pipeline-dev-bucket"
+    },
+    "bigquery": {
+      "dataset": "data_pipeline_dev_dataset"
+    }
+  },
+  "azure": {
+    "resource_group": "data-pipeline-dev-rg",
+    "storage": {
+      "account_name": "datapipelinedevstore",
+      "container": "data-pipeline-dev"
+    }
+  },
+  "database": {
+    "url": "postgresql://localhost:5432/data_pipeline_dev"
+  },
+  "logging": {
+    "level": "DEBUG",
+    "file": "/tmp/data-pipeline-dev.log"
+  }
+}

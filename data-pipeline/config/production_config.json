@@ -1,0 +1,63 @@
+{
+  "environment": "production",
+  "spark": {
+    "app_name": "DataPipeline-Prod",
+    "master": "yarn",
+    "log_level": "WARN",
+    "checkpoint_location": "s3a://data-pipeline-prod-bucket/checkpoints",
+    "executor_memory": "8g",
+    "driver_memory": "4g",
+    "shuffle_partitions": 200,
+    "default_parallelism": 100
+  },
+  "aws": {
+    "region": "us-east-1",
+    "s3": {
+      "bucket": "data-pipeline-prod-bucket",
+      "input_prefix": "raw/",
+      "output_prefix": "processed/",
+      "archive_prefix": "archive/"
+    },
+    "glue": {
+      "database": "data_pipeline_prod_db"
+    },
+    "emr": {
+      "cluster_name": "DataPipelineProdCluster",
+      "release_label": "emr-6.10.0",
+      "instance_count": 5,
+      "instance_type": "r5.2xlarge"
+    }
+  },
+  "gcp": {
+    "project": "data-pipeline-prod-project",
+    "region": "us-central1",
+    "gcs": {
+      "bucket": "data-pipeline-prod-bucket"
+    },
+    "bigquery": {
+      "dataset": "data_pipeline_prod_dataset",
+      "location": "US"
+    }
+  },
+  "azure": {
+    "resource_group": "data-pipeline-prod-rg",
+    "storage": {
+      "account_name": "datapipelineprodstore",
+      "container": "data-pipeline-prod"
+    }
+  },
+  "database": {
+    "url": "postgresql://${DB_HOST}:5432/data_pipeline_prod",
+    "max_connections": 20,
+    "timeout": 60
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/var/log/data-pipeline/app.log"
+  },
+  "monitoring": {
+    "enable_metrics": true,
+    "metrics_endpoint": "https://metrics.example.com/ingest",
+    "alert_threshold": 0.8
+  }
+}

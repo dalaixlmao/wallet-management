@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  data-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: data-pipeline
+    environment:
+      - PIPELINE_ENV=development
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - AZURE_STORAGE_CONNECTION_STRING=${AZURE_STORAGE_CONNECTION_STRING}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+    volumes:
+      - ./:/app
+      - ./credentials:/app/credentials
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: >
+      python -m data_pipeline.orchestration.pipeline_runner
+      --env development
+      --destination parquet
+    networks:
+      - data-network
+
+  data-pipeline-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: data-pipeline-test
+    environment:
+      - PIPELINE_ENV=development
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/gcp-credentials.json
+      - AZURE_STORAGE_CONNECTION_STRING=${AZURE_STORAGE_CONNECTION_STRING}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+    volumes:
+      - ./:/app
+      - ./credentials:/app/credentials
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: >
+      python -m pytest tests/ -v
+    networks:
+      - data-network
+
+networks:
+  data-network:
+    driver: bridge
